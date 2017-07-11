@@ -16,12 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import puzzleleaf.tistory.com.android_miniproject2.adapter.ItemAdapter;
 import puzzleleaf.tistory.com.android_miniproject2.object.HsdObject;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     //Drawer Toolbar 변수
     private DrawerLayout drawer;
@@ -55,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         imgArr = getResources().obtainTypedArray(R.array.hsd_img);
         menuStr = getResources().getStringArray(R.array.hsd_menu);
         drawerToolbarInit();
-        tabInit();
         dataInit();
         recyclerViewInit();
+        tabInit();
         uiInit();
 
     }
@@ -90,15 +92,47 @@ public class MainActivity extends AppCompatActivity {
     private void tabInit() {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("메뉴순"));
-        tabLayout.addTab(tabLayout.newTab().setText("가격순"));
-        tabLayout.addTab(tabLayout.newTab().setText("가나다"));
-
+        tabLayout.addTab(tabLayout.newTab().setText("이름순"));
+        tabLayout.addTab(tabLayout.newTab().setText("최저가"));
+        tabLayout.addTab(tabLayout.newTab().setText("최고가"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0) {
+                    DescendingObj descendingObj = new DescendingObj();
+                    Collections.sort(hsdObjects,descendingObj);
+                    itemAdapter.notifyDataSetChanged();
+                }
+                else if(tab.getPosition()==1){
+                    AscendingPrice ascendingPrice = new AscendingPrice();
+                    Collections.sort(hsdObjects,ascendingPrice);
+                    itemAdapter.notifyDataSetChanged();
+                }
+                else{
+                    DescendingPrice descendingPrice = new DescendingPrice();
+                    Collections.sort(hsdObjects,descendingPrice);
+                    itemAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
+    //저장 데이터 초기화
     private void dataInit() {
         hsdObjects = new ArrayList<>();
         for(int i=0;i<menuStr.length;i++) {
@@ -113,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         //Manager init
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
 
-
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         //Adapter
@@ -127,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView)findViewById(R.id.viewChanger);
     }
 
+    //LayoutManager 변환
     public void viewChanger(View v) {
         if(!flag) {
             recyclerView.setLayoutManager(linearLayoutManager);
@@ -140,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter.notifyItemChanged(0);
         flag = !flag;
     }
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -149,5 +181,31 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+}
+
+class DescendingObj implements Comparator<HsdObject>{
+
+    @Override
+    public int compare(HsdObject o1, HsdObject o2) {
+        return o1.getTitle().compareTo(o2.getTitle());
+    }
+}
+//내림차순 정렬 - 비싼 가격순
+class DescendingPrice implements Comparator<HsdObject>
+{
+    //o1 이 더 작으면 양수 반환 // 같으면 0 반환  //더 크면 음수 반환
+    @Override
+    public int compare(HsdObject o1, HsdObject o2) {
+        return o1.getPrice() < o2.getPrice() ? 1 : o1.getPrice()==o2.getPrice() ? 0 : -1;
+    }
+}
+//오름차순 정렬 - 싼 가격순
+class AscendingPrice implements Comparator<HsdObject>{
+
+    @Override
+    public int compare(HsdObject o1, HsdObject o2) {
+        return o1.getPrice() > o2.getPrice() ? 1 : o1.getPrice()==o2.getPrice() ? 0 : -1;
     }
 }

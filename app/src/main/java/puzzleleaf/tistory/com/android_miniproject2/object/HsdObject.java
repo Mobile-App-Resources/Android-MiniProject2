@@ -10,7 +10,7 @@ public class HsdObject {
 
     private String title="";
     private int price=0;
-    private String menu;
+    private String menu="";
     private int res;
     private boolean isChecked;
 

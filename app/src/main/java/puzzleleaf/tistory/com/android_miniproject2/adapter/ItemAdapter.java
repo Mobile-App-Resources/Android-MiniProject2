@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import puzzleleaf.tistory.com.android_miniproject2.R;
-import puzzleleaf.tistory.com.android_miniproject2.object.HsdObject;
+import puzzleleaf.tistory.com.android_miniproject2.object.ItemObject;
 
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private ArrayList<HsdObject> obj;
+    private ArrayList<ItemObject> obj;
 
-    public ItemAdapter(Context context, ArrayList<HsdObject> obj) {
+    public ItemAdapter(Context context, ArrayList<ItemObject> obj) {
 
         this.mInflater = LayoutInflater.from(context);
         this.obj =obj;
@@ -35,12 +35,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
-        holder.myImage.setImageResource(obj.get(position).getRes());
-        holder.myPrice.setText(String.valueOf(obj.get(position).getPrice())+"원!!");
-        holder.myTitle.setText(obj.get(position).getTitle());
+        itemBindInit(holder,position);
         checkUiUpdate(holder,position);
+    }
 
+
+    private void itemBindInit(final ViewHolder holder, final int position)
+    {
+        holder.myImage.setImageResource(obj.get(position).getRes());
+        holder.myPrice.setText(obj.get(position).getContents());
+        holder.myTitle.setText(obj.get(position).getTitle());
         holder.myCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,8 +52,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 checkUiUpdate(holder,position);
             }
         });
-
     }
+
+    //체크 데이터 변경
     private void clickUiEvent(ViewHolder holder, int position){
         if(!obj.get(position).isChecked()) {
             obj.get(position).setChecked(true);
@@ -57,6 +62,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             obj.get(position).setChecked(false);
         }
     }
+    //체크박스 이미지 변경
     private void checkUiUpdate(ViewHolder holder, int position)
     {
         //Check UI
@@ -68,8 +74,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
 
-
-    //RecyclerView에서 게시물 순서 꼬이는 문제 해결을 위한 코드
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -87,8 +91,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         private TextView myPrice;
         private TextView myTitle;
         private ImageView myCheck;
-
-
 
         public ViewHolder(View itemView) {
             super(itemView);

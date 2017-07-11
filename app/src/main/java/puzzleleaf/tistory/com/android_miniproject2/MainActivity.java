@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import puzzleleaf.tistory.com.android_miniproject2.adapter.ItemAdapter;
-import puzzleleaf.tistory.com.android_miniproject2.object.HsdObject;
+import puzzleleaf.tistory.com.android_miniproject2.object.ItemObject;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -41,7 +41,10 @@ public class MainActivity extends AppCompatActivity{
     String[] menuStr;
 
     //Item
-    ArrayList<HsdObject> hsdObjects;
+    ArrayList<ItemObject> itemObjects;
+    AscendingDistance ascendingDistance = new AscendingDistance();
+    DescendingPopularity descendingPopularity = new DescendingPopularity();
+    AscendingRecent ascendingRecent = new AscendingRecent();
 
     //Recycler
     private RecyclerView recyclerView;
@@ -54,8 +57,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imgArr = getResources().obtainTypedArray(R.array.hsd_img);
-        menuStr = getResources().getStringArray(R.array.hsd_menu);
+
         drawerToolbarInit();
         dataInit();
         recyclerViewInit();
@@ -92,9 +94,9 @@ public class MainActivity extends AppCompatActivity{
     private void tabInit() {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("이름순"));
-        tabLayout.addTab(tabLayout.newTab().setText("최저가"));
-        tabLayout.addTab(tabLayout.newTab().setText("최고가"));
+        tabLayout.addTab(tabLayout.newTab().setText("거리순"));
+        tabLayout.addTab(tabLayout.newTab().setText("인기순"));
+        tabLayout.addTab(tabLayout.newTab().setText("최신순"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -102,21 +104,16 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition()==0) {
-                    DescendingObj descendingObj = new DescendingObj();
-                    Collections.sort(hsdObjects,descendingObj);
-                    itemAdapter.notifyDataSetChanged();
+                    Collections.sort(itemObjects,ascendingDistance);
                 }
                 else if(tab.getPosition()==1){
-                    AscendingPrice ascendingPrice = new AscendingPrice();
-                    Collections.sort(hsdObjects,ascendingPrice);
-                    itemAdapter.notifyDataSetChanged();
+                    Collections.sort(itemObjects,descendingPopularity);
                 }
                 else{
-                    DescendingPrice descendingPrice = new DescendingPrice();
-                    Collections.sort(hsdObjects,descendingPrice);
-                    itemAdapter.notifyDataSetChanged();
+                    Collections.sort(itemObjects,ascendingRecent);
                 }
-
+                recyclerView.smoothScrollToPosition(0);
+                itemAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -134,12 +131,15 @@ public class MainActivity extends AppCompatActivity{
 
     //저장 데이터 초기화
     private void dataInit() {
-        hsdObjects = new ArrayList<>();
-        for(int i=0;i<menuStr.length;i++) {
-            HsdObject hsdObject = new HsdObject(menuStr[i],imgArr.getResourceId(i,-1));
-            hsdObjects.add(hsdObject);
-        }
+        imgArr = getResources().obtainTypedArray(R.array.item_img);
+        menuStr = getResources().getStringArray(R.array.item_menu);
 
+        itemObjects = new ArrayList<>();
+        for(int i=0;i<menuStr.length;i++) {
+            ItemObject itemObject = new ItemObject(menuStr[i],imgArr.getResourceId(i,-1));
+            itemObjects.add(itemObject);
+        }
+        Collections.sort(itemObjects,ascendingDistance);
     }
 
     private void recyclerViewInit() {
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity{
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         //Adapter
-        itemAdapter = new ItemAdapter(getApplicationContext(),hsdObjects);
+        itemAdapter = new ItemAdapter(getApplicationContext(), itemObjects);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(itemAdapter);
 
@@ -185,27 +185,31 @@ public class MainActivity extends AppCompatActivity{
 
 }
 
-class DescendingObj implements Comparator<HsdObject>{
 
-    @Override
-    public int compare(HsdObject o1, HsdObject o2) {
-        return o1.getTitle().compareTo(o2.getTitle());
-    }
-}
-//내림차순 정렬 - 비싼 가격순
-class DescendingPrice implements Comparator<HsdObject>
+
+//내림차순 정렬(인기도가 더 높은 순)
+class DescendingPopularity implements Comparator<ItemObject>
 {
     //o1 이 더 작으면 양수 반환 // 같으면 0 반환  //더 크면 음수 반환
     @Override
-    public int compare(HsdObject o1, HsdObject o2) {
-        return o1.getPrice() < o2.getPrice() ? 1 : o1.getPrice()==o2.getPrice() ? 0 : -1;
+    public int compare(ItemObject o1, ItemObject o2) {
+        return o1.getPopularity() < o2.getPopularity() ? 1 : o1.getPopularity()==o2.getPopularity() ? 0 : -1;
     }
+
 }
-//오름차순 정렬 - 싼 가격순
-class AscendingPrice implements Comparator<HsdObject>{
+//오름차순 정렬
+class AscendingDistance implements Comparator<ItemObject>{
 
     @Override
-    public int compare(HsdObject o1, HsdObject o2) {
-        return o1.getPrice() > o2.getPrice() ? 1 : o1.getPrice()==o2.getPrice() ? 0 : -1;
+    public int compare(ItemObject o1, ItemObject o2) {
+        return o1.getDistance() > o2.getDistance() ? 1 : o1.getDistance()==o2.getDistance() ? 0 : -1;
+    }
+}
+//최신순
+class AscendingRecent implements Comparator<ItemObject>{
+
+    @Override
+    public int compare(ItemObject o1, ItemObject o2) {
+        return o1.getRecent()> o2.getRecent() ? 1 : o1.getRecent()==o2.getRecent() ? 0 : -1;
     }
 }

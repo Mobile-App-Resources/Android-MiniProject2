@@ -44,12 +44,11 @@
         </LinearLayout>
     </LinearLayout>
     <!-- 콘텐츠 -->
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:id="@+id/recyclerView">
 
-    </android.support.v4.view.ViewPager>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -1,8 +1,11 @@
 package puzzleleaf.tistory.com.android_miniproject2;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,8 +13,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
-import puzzleleaf.tistory.com.android_miniproject2.adapter.TabPagerAdapter;
+import java.util.ArrayList;
+
+import puzzleleaf.tistory.com.android_miniproject2.adapter.ItemAdapter;
+import puzzleleaf.tistory.com.android_miniproject2.object.HsdObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,26 +29,41 @@ public class MainActivity extends AppCompatActivity {
 
     //탭 레이아웃
     private TabLayout tabLayout;
-    private TabPagerAdapter pagerAdapter;
 
-    int test = 5;
-    //Viewpager
-    private ViewPager viewPager;
+    //View Changer
+    private ImageView imageView;
+    private boolean flag =false;
+
+    //이미지 할당
+    TypedArray imgArr;
+    String[] menuStr;
+
+    //Item
+    ArrayList<HsdObject> hsdObjects;
+
+    //Recycler
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private ItemAdapter itemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        imgArr = getResources().obtainTypedArray(R.array.hsd_img);
+        menuStr = getResources().getStringArray(R.array.hsd_menu);
         drawerToolbarInit();
         tabInit();
-        viewPagerInit();
+        dataInit();
+        recyclerViewInit();
+        uiInit();
 
     }
 
     //Drawer
-    private void drawerToolbarInit()
-    {
+    private void drawerToolbarInit() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -65,12 +87,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Tab
-    private void tabInit()
-    {
+    private void tabInit() {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("가나다"));
-        tabLayout.addTab(tabLayout.newTab().setText("가나다"));
+        tabLayout.addTab(tabLayout.newTab().setText("메뉴순"));
+        tabLayout.addTab(tabLayout.newTab().setText("가격순"));
         tabLayout.addTab(tabLayout.newTab().setText("가나다"));
 
 
@@ -78,29 +99,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //ViewPager
-    private void viewPagerInit()
-    {
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setOffscreenPageLimit(2);
-        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),test);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+    private void dataInit() {
+        hsdObjects = new ArrayList<>();
+        for(int i=0;i<menuStr.length;i++) {
+            HsdObject hsdObject = new HsdObject(menuStr[i],imgArr.getResourceId(i,-1));
+            hsdObjects.add(hsdObject);
+        }
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+    }
 
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
+    private void recyclerViewInit() {
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        //Manager init
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
 
+
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        //Adapter
+        itemAdapter = new ItemAdapter(getApplicationContext(),hsdObjects);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+        recyclerView.setAdapter(itemAdapter);
+
+    }
+
+    private void uiInit() {
+        imageView = (ImageView)findViewById(R.id.viewChanger);
+    }
+
+    public void viewChanger(View v) {
+        if(!flag) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
+        }
+        else{
+            recyclerView.setLayoutManager(staggeredGridLayoutManager);
+            imageView.setImageResource(R.drawable.ic_view_agenda_black_24dp);
+        }
+
+        itemAdapter.notifyItemChanged(0);
+        flag = !flag;
     }
 
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="hsd_img">
+        <item>@drawable/hsd1</item>
+        <item>@drawable/hsd2</item>
+        <item>@drawable/hsd3</item>
+        <item>@drawable/hsd4</item>
+        <item>@drawable/hsd5</item>
+        <item>@drawable/hsd6</item>
+        <item>@drawable/hsd7</item>
+        <item>@drawable/hsd8</item>
+        <item>@drawable/hsd9</item>
+        <item>@drawable/hsd10</item>
+        <item>@drawable/hsd11</item>
+        <item>@drawable/hsd12</item>
+        <item>@drawable/hsd13</item>
+        <item>@drawable/hsd14</item>
+        <item>@drawable/hsd15</item>
+        <item>@drawable/hsd16</item>
+        <item>@drawable/hsd17</item>
+        <item>@drawable/hsd18</item>
+        <item>@drawable/hsd19</item>
+        <item>@drawable/hsd20</item>
+        <item>@drawable/hsd21</item>
+        <item>@drawable/hsd22</item>
+        <item>@drawable/hsd23</item>
+        <item>@drawable/hsd24</item>
+        <item>@drawable/hsd25</item>
+        <item>@drawable/hsd26</item>
+        <item>@drawable/hsd27</item>
+        <item>@drawable/hsd28</item>
+        <item>@drawable/hsd29</item>
+        <item>@drawable/hsd30</item>
+        <item>@drawable/hsd31</item>
+        <item>@drawable/hsd32</item>
+        <item>@drawable/hsd33</item>
+        <item>@drawable/hsd34</item>
+        <item>@drawable/hsd35</item>
+        <item>@drawable/hsd36</item>
+        <item>@drawable/hsd37</item>
+        <item>@drawable/hsd38</item>
+        <item>@drawable/hsd39</item>
+        <item>@drawable/hsd40</item>
+    </array>
+
+    <string-array name="hsd_menu">
+        <item>깐풍기도시락@4300</item>
+        <item>깐깐도시락@5800</item>
+        <item>나시고랭@4500</item>
+        <item>데미그라스함박스테이크@5800</item>
+        <item>고등어조림 도시락@5800</item>
+        <item>매화도시락@10000</item>
+        <item>개나리도시락@8000</item>
+        <item>진달래도시락@7000</item>
+        <item>고기고기도시락@3600</item>
+        <item>햄치고기고기도시락@5000</item>
+        <item>돈치고기고기도시락@5200</item>
+        <item>새치고기고기도시락@6000</item>
+        <item>칠리포크도시락@3600</item>
+        <item>돈까스도련님도시락@3600</item>
+        <item>국화도시락@4000</item>
+        <item>치킨제육도시락@4300</item>
+        <item>돈치불고기도시락@4700</item>
+        <item>동백도시락@5000</item>
+        <item>해피박스@3000</item>
+        <item>도련님도시락@3400</item>
+        <item>디럭스제육볶음도시락@3500</item>
+        <item>카레도시락@2700</item>
+        <item>돈까스카레@3800</item>
+        <item>폴리도시락@3800</item>
+        <item>치킨마요@2700</item>
+        <item>참치마요@2700</item>
+        <item>참치셀러드마요@3200</item>
+        <item>빅치킨마요@3300</item>
+        <item>치킨셀러드마요@3200</item>
+        <item>돈치마요@3300</item>
+        <item>돈까스덮밥@3400</item>
+        <item>새우돈까스덮밥@3600</item>
+        <item>야채가끼아게 덮밥@3400</item>
+        <item>김치볶음밥@2900</item>
+        <item>불고기김치볶음밥@3700</item>
+        <item>불닭 비빔밥@4500</item>
+        <item>열무강된장 비빔밥@3500</item>
+        <item>불고기비빔밥@4500</item>
+        <item>제육강된장비빔밥@4500</item>
+        <item>참치야채고추장@2800</item>
+    </string-array>
+
+</resources>

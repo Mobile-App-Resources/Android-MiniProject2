@@ -11,19 +11,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import puzzleleaf.tistory.com.android_miniproject2.R;
+import puzzleleaf.tistory.com.android_miniproject2.object.HsdObject;
 
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private ArrayList<String> obj;
+    private ArrayList<HsdObject> obj;
 
-    public ItemAdapter(Context context) {
-        obj = new ArrayList<>();
-        obj.add("qwe");
-        obj.add("qwe");
-        obj.add("qwe");
+    public ItemAdapter(Context context, ArrayList<HsdObject> obj) {
+
         this.mInflater = LayoutInflater.from(context);
+        this.obj =obj;
     }
 
     @Override
@@ -35,9 +34,38 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.myImage.setImageResource(R.drawable.sample6);
+        holder.myImage.setImageResource(obj.get(position).getRes());
+        holder.myPrice.setText(String.valueOf(obj.get(position).getPrice())+"원!!");
+        holder.myTitle.setText(obj.get(position).getTitle());
+        checkUiUpdate(holder,position);
+
+        holder.myCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickUiEvent(holder,position);
+                checkUiUpdate(holder,position);
+            }
+        });
+
+    }
+    private void clickUiEvent(ViewHolder holder, int position){
+        if(!obj.get(position).isChecked()) {
+            obj.get(position).setChecked(true);
+        }else{
+            obj.get(position).setChecked(false);
+        }
+    }
+    private void checkUiUpdate(ViewHolder holder, int position)
+    {
+        //Check UI
+        if(obj.get(position).isChecked()){
+            holder.myCheck.setImageResource(R.drawable.ic_check_p);
+        }
+        else{
+            holder.myCheck.setImageResource(R.drawable.ic_check_n);
+        }
     }
 
 
@@ -56,13 +84,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView myImage;
-        private TextView mytext;
+        private TextView myPrice;
+        private TextView myTitle;
+        private ImageView myCheck;
+
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             myImage = (ImageView)itemView.findViewById(R.id.cardImageView);
-            mytext = (TextView)itemView.findViewById(R.id.cardTextView);
+            myPrice = (TextView)itemView.findViewById(R.id.cardTextView);
+            myTitle = (TextView)itemView.findViewById(R.id.cardTextTitle);
+            myCheck = (ImageView)itemView.findViewById(R.id.cardCheckImage);
 
         }
 

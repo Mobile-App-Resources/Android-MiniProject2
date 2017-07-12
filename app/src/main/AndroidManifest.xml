@@ -3,7 +3,7 @@
     package="puzzleleaf.tistory.com.android_miniproject2">
 
     <uses-sdk
-        android:minSdkVersion="18"
+        android:minSdkVersion="16"
         android:targetSdkVersion="25"
         android:maxSdkVersion="25"/>
 

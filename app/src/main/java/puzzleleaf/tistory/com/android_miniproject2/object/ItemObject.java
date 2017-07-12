@@ -1,6 +1,5 @@
 package puzzleleaf.tistory.com.android_miniproject2.object;
 
-import android.util.Log;
 
 /**
  * Created by cmtyx on 2017-07-11.

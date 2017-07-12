@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import butterknife.BindArray;
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import puzzleleaf.tistory.com.android_miniproject2.adapter.ItemAdapter;
 import puzzleleaf.tistory.com.android_miniproject2.object.ItemObject;
 
@@ -26,19 +30,22 @@ import puzzleleaf.tistory.com.android_miniproject2.object.ItemObject;
 public class MainActivity extends AppCompatActivity{
 
     //Drawer Toolbar 변수
-    private DrawerLayout drawer;
-    private Toolbar toolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     //탭 레이아웃
-    private TabLayout tabLayout;
+    @BindView(R.id.tabLayout) TabLayout tabLayout;
+    @BindString(R.string.menu1) String menu1;
+    @BindString(R.string.menu2) String menu2;
+    @BindString(R.string.menu3) String menu3;
 
     //View Changer
-    private ImageView imageView;
-    private boolean flag =false;
+    @BindView(R.id.viewChanger) ImageView imageView;
+    boolean viewChangerFlag =false;
 
     //이미지 할당
-    TypedArray imgArr;
-    String[] menuStr;
+    @BindArray(R.array.item_img) TypedArray imgArr;
+    @BindArray(R.array.item_menu) String[] menuStr;
 
     //Item
     ArrayList<ItemObject> itemObjects;
@@ -47,32 +54,27 @@ public class MainActivity extends AppCompatActivity{
     AscendingRecent ascendingRecent = new AscendingRecent();
 
     //Recycler
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
-    private StaggeredGridLayoutManager staggeredGridLayoutManager;
-    private ItemAdapter itemAdapter;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
+    ItemAdapter itemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
 
         drawerToolbarInit();
         dataInit();
         recyclerViewInit();
         tabInit();
-        uiInit();
-
     }
 
     //Drawer
     private void drawerToolbarInit() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        //접근성 지원을 위한 열기 닫기에 해당하는 문자열 리소스
+        //접근성 지원을 위한 열기 닫기에 해당하는 문자열 리소스 0 0
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, 0, 0){
             @Override
@@ -85,21 +87,17 @@ public class MainActivity extends AppCompatActivity{
                 super.onDrawerClosed(drawerView);
             }
         };
-
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
 
+
     //Tab
     private void tabInit() {
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
-        tabLayout.addTab(tabLayout.newTab().setText("거리순"));
-        tabLayout.addTab(tabLayout.newTab().setText("인기순"));
-        tabLayout.addTab(tabLayout.newTab().setText("최신순"));
-
+        tabLayout.addTab(tabLayout.newTab().setText(menu1));
+        tabLayout.addTab(tabLayout.newTab().setText(menu2));
+        tabLayout.addTab(tabLayout.newTab().setText(menu3));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
                 else{
                     Collections.sort(itemObjects,ascendingRecent);
                 }
-                recyclerView.smoothScrollToPosition(0);
+                recyclerView.smoothScrollToPosition(0);//맨 위로
                 itemAdapter.notifyDataSetChanged();
             }
 
@@ -131,9 +129,6 @@ public class MainActivity extends AppCompatActivity{
 
     //저장 데이터 초기화
     private void dataInit() {
-        imgArr = getResources().obtainTypedArray(R.array.item_img);
-        menuStr = getResources().getStringArray(R.array.item_menu);
-
         itemObjects = new ArrayList<>();
         for(int i=0;i<menuStr.length;i++) {
             ItemObject itemObject = new ItemObject(menuStr[i],imgArr.getResourceId(i,-1));
@@ -143,10 +138,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void recyclerViewInit() {
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         //Manager init
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         //Adapter
@@ -156,13 +149,9 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private void uiInit() {
-        imageView = (ImageView)findViewById(R.id.viewChanger);
-    }
-
     //LayoutManager 변환
     public void viewChanger(View v) {
-        if(!flag) {
+        if(!viewChangerFlag) {
             recyclerView.setLayoutManager(linearLayoutManager);
             imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
         }
@@ -171,8 +160,8 @@ public class MainActivity extends AppCompatActivity{
             imageView.setImageResource(R.drawable.ic_view_agenda_black_24dp);
         }
 
-        itemAdapter.notifyItemChanged(0);
-        flag = !flag;
+        itemAdapter.notifyDataSetChanged();
+        viewChangerFlag= !viewChangerFlag;
     }
     @Override
     public void onBackPressed() {
@@ -188,18 +177,15 @@ public class MainActivity extends AppCompatActivity{
 
 
 //내림차순 정렬(인기도가 더 높은 순)
-class DescendingPopularity implements Comparator<ItemObject>
-{
+class DescendingPopularity implements Comparator<ItemObject> {
     //o1 이 더 작으면 양수 반환 // 같으면 0 반환  //더 크면 음수 반환
     @Override
     public int compare(ItemObject o1, ItemObject o2) {
         return o1.getPopularity() < o2.getPopularity() ? 1 : o1.getPopularity()==o2.getPopularity() ? 0 : -1;
     }
-
 }
 //오름차순 정렬
 class AscendingDistance implements Comparator<ItemObject>{
-
     @Override
     public int compare(ItemObject o1, ItemObject o2) {
         return o1.getDistance() > o2.getDistance() ? 1 : o1.getDistance()==o2.getDistance() ? 0 : -1;
@@ -207,7 +193,6 @@ class AscendingDistance implements Comparator<ItemObject>{
 }
 //최신순
 class AscendingRecent implements Comparator<ItemObject>{
-
     @Override
     public int compare(ItemObject o1, ItemObject o2) {
         return o1.getRecent()> o2.getRecent() ? 1 : o1.getRecent()==o2.getRecent() ? 0 : -1;

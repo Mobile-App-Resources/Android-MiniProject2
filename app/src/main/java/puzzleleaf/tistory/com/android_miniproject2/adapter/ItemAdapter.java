@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
 import java.util.ArrayList;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import puzzleleaf.tistory.com.android_miniproject2.R;
 import puzzleleaf.tistory.com.android_miniproject2.object.ItemObject;
 
@@ -40,22 +40,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
 
-    private void itemBindInit(final ViewHolder holder, final int position)
-    {
+    private void itemBindInit(final ViewHolder holder, final int position) {
         holder.myImage.setImageResource(obj.get(position).getRes());
         holder.myPrice.setText(obj.get(position).getContents());
         holder.myTitle.setText(obj.get(position).getTitle());
         holder.myCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickUiEvent(holder,position);
+                clickUiEvent(position);
                 checkUiUpdate(holder,position);
             }
         });
     }
-
     //체크 데이터 변경
-    private void clickUiEvent(ViewHolder holder, int position){
+    private void clickUiEvent(int position){
         if(!obj.get(position).isChecked()) {
             obj.get(position).setChecked(true);
         }else{
@@ -63,8 +61,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
     //체크박스 이미지 변경
-    private void checkUiUpdate(ViewHolder holder, int position)
-    {
+    private void checkUiUpdate(ViewHolder holder, int position) {
         //Check UI
         if(obj.get(position).isChecked()){
             holder.myCheck.setImageResource(R.drawable.ic_check_p);
@@ -87,18 +84,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView myImage;
-        private TextView myPrice;
-        private TextView myTitle;
-        private ImageView myCheck;
+        @BindView(R.id.cardImageView) ImageView myImage;
+        @BindView(R.id.cardTextView) TextView myPrice;
+        @BindView(R.id.cardTextTitle) TextView myTitle;
+        @BindView(R.id.cardCheckImage) ImageView myCheck;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            myImage = (ImageView)itemView.findViewById(R.id.cardImageView);
-            myPrice = (TextView)itemView.findViewById(R.id.cardTextView);
-            myTitle = (TextView)itemView.findViewById(R.id.cardTextTitle);
-            myCheck = (ImageView)itemView.findViewById(R.id.cardCheckImage);
-
+            ButterKnife.bind(this,itemView);
         }
 
     }

@@ -7,6 +7,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
 
+    <color name="drawerColor">#00ffffff</color>
     <color name="itemContentsColor">#a3a3a3</color>
 
     <color name="tabSelectedColor">#6eb948</color>

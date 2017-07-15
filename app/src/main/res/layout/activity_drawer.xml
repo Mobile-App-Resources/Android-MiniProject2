@@ -4,15 +4,13 @@
     android:layout_width="@dimen/drawer_size"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorWhite"
+    android:background="@color/drawerColor"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/drawer_contents"
-        android:textAppearance="@style/TabLayoutTextStyle"
-        android:textColor="@color/colorBlack"/>
-
+        android:layout_gravity="center"
+        android:src="@drawable/info"
+        android:adjustViewBounds="true"/>
 </LinearLayout>
 

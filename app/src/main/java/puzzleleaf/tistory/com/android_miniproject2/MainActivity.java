@@ -1,5 +1,6 @@
 package puzzleleaf.tistory.com.android_miniproject2;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 
@@ -14,6 +15,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity{
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     ItemAdapter itemAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +75,18 @@ public class MainActivity extends AppCompatActivity{
         dataInit();
         recyclerViewInit();
         tabInit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     //Drawer
@@ -173,9 +191,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 }
-
-
-
 //내림차순 정렬(인기도가 더 높은 순)
 class DescendingPopularity implements Comparator<ItemObject> {
     //o1 이 더 작으면 양수 반환 // 같으면 0 반환  //더 크면 음수 반환

@@ -15,7 +15,7 @@
     <dimen name="icon_size">26dp</dimen>
     <dimen name="icon_big_size">32dp</dimen>
 
-    <dimen name="drawer_size">150dp</dimen>
+    <dimen name="drawer_size">200dp</dimen>
 
     <dimen name="layout_basic_size">50dp</dimen>
 </resources>

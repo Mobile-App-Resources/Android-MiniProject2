@@ -1,6 +1,6 @@
 package puzzleleaf.tistory.com.android_miniproject2;
 
-import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 
@@ -16,9 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.gjiazhe.panoramaimageview.GyroscopeObserver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,6 +140,11 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     //저장 데이터 초기화
